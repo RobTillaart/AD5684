@@ -49,8 +49,12 @@ unittest(constructors)
 
 unittest(get_type)
 {
-  AD5684 AD0(8);  //  implicit HW SPI
-  assertEqual(18, AD0.getType());
+  AD5684 AD4(4);  //  implicit HW SPI
+  AD5685 AD5(5);
+  AD5686 AD6(6);
+  assertEqual(12, AD4.getType());
+  assertEqual(14, AD5.getType());
+  assertEqual(16, AD6.getType());
 }
 
 
