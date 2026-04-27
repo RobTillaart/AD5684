@@ -47,7 +47,7 @@ void loop()
     value -= period;
     value = amplitude * (1 - value / period);
   }
-  AD16_HW.setValue(value);
+  AD16_HW.setValue(0, value);
   Serial.println(value);
 }
 
