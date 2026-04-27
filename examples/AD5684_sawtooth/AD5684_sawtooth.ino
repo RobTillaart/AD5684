@@ -41,7 +41,7 @@ void loop()
   //  value = period - value;  //  reverse
 
   value = amplitude * value / period;
-  AD16_HW.setValue(value);
+  AD16_HW.setAll(value);
   Serial.println(value);
 }
 
