@@ -61,8 +61,8 @@ unittest(get_setValue)
   AD0.begin();
   for (int v = 0; v < 2000; v += 100)
   {
-    AD0.setValue(v);
-    assertEqual(v, AD0.getValue());
+    AD0.setValue(0, v);
+    assertEqual(v, AD0.getValue(0));
   }
 }
 
@@ -74,8 +74,8 @@ unittest(get_setPercentage)
   AD0.begin();
   for (float p = 0; p < 100; p += 9)
   {
-    AD0.setPercentage(p);
-    assertEqualFloat(p, AD0.getPercentage(), 0.1);
+    AD0.setPercentage(1, p);
+    assertEqualFloat(p, AD0.getPercentage(1), 0.1);
   }
 }
 
