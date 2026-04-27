@@ -77,10 +77,14 @@ See datasheet
 
 Channels is 0..3 to select the DAC.
 
-- **bool setValue(uint8_t channel, uint16_t value = 0)** set the value 
+- **bool setValue(uint8_t channel, uint16_t value)** set the value 
 to the output channel immediately, effectively a prepare + update in one call.
 Returns false if the value is out of range.
 Channel must be 0..3
+- **bool setAll(uint16_t value)** set the value to all channels immediately,
+effectively a prepare + update in one call.
+Returns false if the value is out of range.
+Typical to set all to zero or midrange value.
 - **uint32_t getValue(uint8_t channel)** returns set value from cache.
 At power up the AD5684 will be reset to 0 (== 0 volt).
 - **uint32_t getMaxValue()** returns 262143 for AD5684.
@@ -145,6 +149,8 @@ Please share your performance data, open an issue to report.
 
 #### Wont
 
+- set all to certain value - solved by setAll().
+  - setZero(), setMidRange(), setMax()
 
 ## Support
 

@@ -9,6 +9,7 @@ begin	KEYWORD2
 getType	KEYWORD2
 
 setValue	KEYWORD2
+setAll	KEYWORD2
 getValue	KEYWORD2
 getMaxValue	KEYWORD2
 

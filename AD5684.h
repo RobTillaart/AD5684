@@ -48,8 +48,8 @@ public:
   //  SET DAC
   //  sets output immediately = prepare + update.
   //  channel = 0..3
-  bool     setValue(uint8_t channel, uint16_t value = 0);
-  //  bool     setAllValue(uint16_t value = 0);  //  table 9
+  bool     setValue(uint8_t channel, uint16_t value);
+  bool     setAll(uint16_t value);  //  table 9
   uint16_t getValue(uint8_t channel);  //  get from cache.
   uint16_t getMaxValue();
   //  wrapper around get/setValue

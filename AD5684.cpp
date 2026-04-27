@@ -22,6 +22,7 @@ constexpr uint8_t AD5684_REG_SETUP_DCEN    = 0x80;  //
 constexpr uint8_t AD5684_REG_READ_BACK     = 0x90;  //
 constexpr uint8_t AD5684_REG_NOP_DC_MODE   = 0xF0;  //
 
+constexpr uint8_t AD5684_ALL_CHANNEL       = 0x0F;
 
 
 //  HARDWARE SPI
@@ -103,6 +104,17 @@ bool AD5684::setValue(uint8_t channel, uint16_t value)
   _value[channel] = value;
   //  prepare transfer.
   updateDevice(AD5684_REG_WRITE_UPDATE, channel, value);
+  return true;
+}
+
+bool AD5684::setAll(uint16_t value)
+{
+  //  range check
+  if (value > _maxValue) return false;
+  //  keep last value
+  for (int i = 0; i < 4; i++) _value[i] = value;
+  //  prepare transfer.
+  updateDevice(AD5684_REG_WRITE_UPDATE, AD5684_ALL_CHANNEL, value);
   return true;
 }
 
