@@ -25,6 +25,30 @@
 #endif
 
 
+//  not all "commands" implemented                  //  IMPLEMENTED
+//  datasheet page 20, table 8
+constexpr uint8_t AD5684_REG_NOP           = 0x00;  //
+constexpr uint8_t AD5684_REG_WRITE         = 0x10;  //  YES
+constexpr uint8_t AD5684_REG_UPDATE        = 0x20;  //  YES
+constexpr uint8_t AD5684_REG_WRITE_UPDATE  = 0x30;  //  YES
+constexpr uint8_t AD5684_REG_POWER_UPDOWN  = 0x40;  //  YES
+constexpr uint8_t AD5684_REG_LDAC_MASK     = 0x50;  //
+constexpr uint8_t AD5684_REG_SW_RESET      = 0x60;  //  YES
+constexpr uint8_t AD5684_REG_SETUP_INT_REF = 0x70;  //
+constexpr uint8_t AD5684_REG_SETUP_DCEN    = 0x80;  //
+constexpr uint8_t AD5684_REG_READ_BACK     = 0x90;  //
+constexpr uint8_t AD5684_REG_NOP_DC_MODE   = 0xF0;  //
+
+
+
+//  setPowenMode()
+constexpr uint8_t AD5684_PWR_NORMAL    = 0x00;
+constexpr uint8_t AD5684_PWR_1K        = 0x01;
+constexpr uint8_t AD5684_PWR_100K      = 0x02;
+constexpr uint8_t AD5684_PWR_TRI_STATE = 0x03;
+
+
+
 class AD5684
 {
 public:
@@ -57,13 +81,21 @@ public:
   float    getPercentage(uint8_t channel);
 
 
-  //  CONTROL REGISTER (see datasheet)
-  //  and more...
+  //  prep separately and update simultaneously
+  bool     prepareValue(uint8_t channel, uint16_t value);
+  bool     updateAll();
 
 
+  //  CONTROL REGISTERS - see datasheet for details.
+  //
+  //  generic command to control all registers
+  //          not (fully) supported in the library yet.
+  void     sendCommand(uint8_t command, uint8_t channel, uint16_t data);
 
-
-
+  //  TODO - affects output values?
+  bool     softwareReset();
+  //  sets all channels power mode
+  bool     setPowerDownMode(uint8_t mode = AD5684_PWR_NORMAL);
 
 
 

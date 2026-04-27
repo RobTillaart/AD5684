@@ -2,26 +2,14 @@
 //    FILE: AD5684.cpp
 //  AUTHOR: Rob Tillaart
 // VERSION: 0.1.0
-//    DATE: 2023-09-19
+//    DATE: 2026-04-20
 // PURPOSE: Arduino library for AD5684/5/6 4 channel SPI-DAC (12/14/16 bit).
 
 
 #include "AD5684.h"
 
-//  not all "commands" implemented                  //  IMPLEMENTED
-//  datasheet page 20, table 8
-constexpr uint8_t AD5684_REG_NOP           = 0x00;  //
-constexpr uint8_t AD5684_REG_WRITE         = 0x10;  //
-constexpr uint8_t AD5684_REG_UPDATE        = 0x20;  //
-constexpr uint8_t AD5684_REG_WRITE_UPDATE  = 0x30;  //  YES
-constexpr uint8_t AD5684_REG_POWER_UPDOWN  = 0x40;  //
-constexpr uint8_t AD5684_REG_LDAC_MASK     = 0x50;  //
-constexpr uint8_t AD5684_REG_SW_RESET      = 0x60;  //
-constexpr uint8_t AD5684_REG_SETUP_INT_REF = 0x70;  //
-constexpr uint8_t AD5684_REG_SETUP_DCEN    = 0x80;  //
-constexpr uint8_t AD5684_REG_READ_BACK     = 0x90;  //
-constexpr uint8_t AD5684_REG_NOP_DC_MODE   = 0xF0;  //
 
+constexpr uint8_t AD5684_AB_CHANNEL        = 0x03;
 constexpr uint8_t AD5684_ALL_CHANNEL       = 0x0F;
 
 
@@ -146,6 +134,47 @@ float AD5684::getPercentage(uint8_t channel)
     return value * ( 100.0 / _maxValue);
   }
   return 0;
+}
+
+
+
+bool AD5684::prepareValue(uint8_t channel, uint16_t value)
+{
+  if (value > _maxValue)  return false;
+  _value[channel] = value;
+  updateDevice(AD5684_REG_WRITE, channel, value);
+  return true;
+}
+
+bool AD5684::updateAll()
+{
+  updateDevice(AD5684_REG_UPDATE, AD5684_ALL_CHANNEL, 0);
+  return true;
+}
+
+
+/////////////////////////////////////////////////////////
+//
+//  COMMANDS
+//
+void AD5684::sendCommand(uint8_t command, uint8_t channel, uint16_t data)
+{
+  updateDevice(command, channel, data);
+}
+
+
+bool AD5684::softwareReset()
+{
+  updateDevice(AD5684_REG_SW_RESET, 0, 0);
+  return true;
+}
+
+bool AD5684::setPowerDownMode(uint8_t mode)
+{
+  if (mode > 3) return false;
+  uint16_t data = mode | (mode << 2) | (mode << 4) | (mode << 6);
+  updateDevice(AD5684_REG_POWER_UPDOWN, 0x00, data);
+  return true;
 }
 
 

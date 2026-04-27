@@ -16,13 +16,16 @@ Arduino library for AD5684/5/6 4 channel SPI-DAC (12/14/16 bit).
 
 ## Description
 
-**Experimental**
+**Experimental** 
 
-The AD5684 is a 4 channel DAC that can be controlled over SPI.
+The AD5684 is a 4 channel 12 bit DAC that can be controlled over SPI.
+The library also supports the AD5685 (14 bit) and the D5686 (16 bit).
 
-It is possible to daisy chain these DAC's however this is not tested.
+Warning: the library is not tested with hardware yet, so use with care.
 
 TO ELABORATE.
+
+Feedback as always is welcome.
 
 ### Compatibles
 
@@ -85,7 +88,7 @@ Channel must be 0..3
 effectively a prepare + update in one call.
 Returns false if the value is out of range.
 Typical to set all to zero or midrange value.
-- **uint32_t getValue(uint8_t channel)** returns set value from cache.
+- **uint32_t getValue(uint8_t channel)** returns set or prepared value from cache.
 At power up the AD5684 will be reset to 0 (== 0 volt).
 - **uint32_t getMaxValue()** returns 262143 for AD5684.
 - **bool setPercentage(uint8_t channel, float percentage)** sets the output
@@ -95,6 +98,30 @@ If percentage is out of range, it is **not** set and the function returns false.
 Might return a slightly different value than **setPercentage()** due to
 rounding math.
 At power up the function will return 0 as default value.
+
+
+### prepare & update
+
+prep & update separately, allows to update all channels simultaneously (see datasheet).
+
+- **bool prepareValue(uint8_t channel, uint16_t value)**
+- **bool updateAll()** update all channels.
+
+Note: prepareValue() affects the cache of the values.
+
+
+### Misc
+
+- **void softwareReset()**
+- **bool setPowerDownMode(uint8_t mode)**
+
+
+|  mode                  |  value  |
+|:----------------------:|:-------:|
+|  AD5684_PWR_NORMAL     |   0x00  |
+|  AD5684_PWR_1K         |   0x01  |
+|  AD5684_PWR_100K       |   0x02  |
+|  AD5684_PWR_TRI_STATE  |   0x03  |
 
 
 ### SPI
@@ -137,14 +164,21 @@ Please share your performance data, open an issue to report.
 #### Must
 
 - improve documentation a lot
-- get hardware, test the library
+- get hardware, 
+- test the library in detail
 
 #### Should
 
 - add examples
 - add performance tests
+- add generic access to registers.
+- add **setPowerDownMode(channel, mode)**
+  - needs PDM cache per channel?
+- add **updateChannel(uint8_t channel)**
+  - needs PREP cache per channel?
 
 #### Could
+
 
 
 #### Wont
